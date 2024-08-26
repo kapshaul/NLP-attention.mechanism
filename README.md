@@ -211,6 +211,7 @@ English typically follows an SVO (Subject-Verb-Object) structure, while German o
 
 Prepositions and their objects usually align closely, but their usage can differ in certain cases. For example, in Example 3, the English preposition "to" corresponds to the German preposition "zu," and the English conjunction "while" corresponds to the German conjunction "während." Both of these cases show deviations rather than diagonal alignment. In Example 4, the English preposition "in front of" corresponds to the German preposition "vor," which also shows significant deviation.
 
+<br>
 
 #### **2.2. Scaled-Dot Product Attention Code**
 
@@ -243,6 +244,8 @@ class SingleQueryScaledDotProductAttention(nn.Module):
         assert alpha.shape == (hidden.shape[0], encoder_outputs.shape[0])
         return attended_val, alpha
 ```
+
+<br>
 
 #### **2.3. BLEU Score Comparision**
 
