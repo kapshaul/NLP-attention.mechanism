@@ -19,15 +19,15 @@ $$
 where the $\alpha_i$ are referred to as attention values (or collectively as an attention distribution).
 
 #### **1.1 Copying**
-Q. Describe what properties of the keys and queries would result in the output $\mathbf{a}$ being equal to one of the input values $\mathbf{v}_j$. Specifically, what must be true about the query $\mathbf{q}$ and the keys $\mathbf{k}_1, ..., \mathbf{k}_m$ such that $\mathbf{a} \approx \mathbf{v}_j$? (We assume all values are unique -- $\mathbf{v}_i \neq \mathbf{v}_j,~\forall ij$.)
+Q. Describe what properties of the keys and queries would result in the output $\textbf{a}$ being equal to one of the input values $\mathbf{v}_j$. Specifically, what must be true about the query $\mathbf{q}$ and the keys $\mathbf{k}_1, ..., \mathbf{k}_m$ such that $\textbf{a} \approx \mathbf{v}_j$? (We assume all values are unique -- $\mathbf{v}_i \neq \mathbf{v}_j,~\forall ij$.)
 
-> In the case where $\mathbf{a} \approx \mathbf{v}_j$, the similarity score for $\mathbf{q}\mathbf{k}_j^T$ is significantly higher than all others due to the softmax function producing outputs to have probability distribution. Therefore, given a query $\mathbf{q}$, $\mathbf{k}_j$ must be significantly higher than others to determine the similarity score.
+> In the case where $\textbf{a} \approx \mathbf{v}_j$, the similarity score for $\mathbf{q}\mathbf{k}_j^T$ is significantly higher than all others due to the softmax function producing outputs to have probability distribution. Therefore, given a query $\mathbf{q}$, $\mathbf{k}_j$ must be significantly higher than others to determine the similarity score.
 
 #### **1.2 Average of Two**
-Q. Consider a set of key vectors $\mathbf{k}_1, ... , \mathbf{k}_m$ where all keys are orthogonal unit vectors -- that is to say $\mathbf{k}_i \mathbf{k}_j^T = 0, \forall ij$ and $\Vert\mathbf{k}_i\Vert=1,\forall i$. Let $\mathbf{v}_a, \mathbf{v}_b \in \{\mathbf{v}_1, ..., \mathbf{v}_m\}$ be two value vectors. Give an expression for a query vector $\mathbf{q}$ such that the output $\mathbf{a}$ is approximately equal to the average of $\mathbf{v}_a$ and $\mathbf{v}_b$, that is to say $\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. You can reference the key vectors corresponding to $\mathbf{v}_a$ and $\mathbf{v}_b$ as $\mathbf{k}_a$ and $\mathbf{k_b}$ respectively.
+Q. Consider a set of key vectors $\mathbf{k}_1, ... , \mathbf{k}_m$ where all keys are orthogonal unit vectors -- that is to say $\mathbf{k}_i \mathbf{k}_j^T = 0, \forall ij$ and $\Vert\mathbf{k}_i\Vert=1,\forall i$. Let $\mathbf{v}_a, \mathbf{v}_b \in \{\mathbf{v}_1, ..., \mathbf{v}_m\}$ be two value vectors. Give an expression for a query vector $\mathbf{q}$ such that the output $\textbf{a}$ is approximately equal to the average of $\mathbf{v}_a$ and $\mathbf{v}_b$, that is to say $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. You can reference the key vectors corresponding to $\mathbf{v}_a$ and $\mathbf{v}_b$ as $\mathbf{k}_a$ and $\mathbf{k_b}$ respectively.
 
->From $\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.\
-Considering $c$ as a large constant, the below expression for $\mathbf{q}$ can satisfy $\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
+>From $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.\
+Considering $c$ as a large constant, the below expression for $\mathbf{q}$ can satisfy $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
 >
 >$$ \mathbf{q}=c(\mathbf{k}_a + \mathbf{k}_b) $$
 >
@@ -45,18 +45,18 @@ $$
 \mathbf{q}\mathbf{k}_i^T=c(\mathbf{k}_a\mathbf{k}_i^T + \mathbf{k}_b\mathbf{k}_i^T)=c(0+0)=0
 $$
 >
->Therefore, $\alpha_a = \alpha_b = c$ and $\alpha_i = 0$. $\mathbf{a}$ can be written,
+>Therefore, $\alpha_a = \alpha_b = c$ and $\alpha_i = 0$. $\textbf{a}$ can be written,
 >
 >$$
-\mathbf{a} = \alpha_a \mathbf{v}_ a + \alpha_b \mathbf{v}_ b + \sum_{j=1, j\neq a, b}^m \alpha_j \mathbf{v}_j
+\textbf{a} = \alpha_a \mathbf{v}_ a + \alpha_b \mathbf{v}_ b + \sum_{j=1, j\neq a, b}^m \alpha_j \mathbf{v}_j
 $$
 >
 >$$
-\mathbf{a} \approx \frac{1}{2}\mathbf{v}_a + \frac{1}{2}\mathbf{v}_b + 0
+\textbf{a} \approx \frac{1}{2}\mathbf{v}_a + \frac{1}{2}\mathbf{v}_b + 0
 $$
 >
 >$$
-\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
+\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 
 #### **1.3 Noisy Average**
@@ -87,13 +87,13 @@ $$
 >When $\lambda_a \approx \lambda_b$,
 >
 >$$
-\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
+\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 >
 >When $\lambda_a \gg \lambda_b$ or $\lambda_a \ll \lambda_b$,
 >
 >$$
-\mathbf{a} \approx \mathbf{v}_a \text{ or } \mathbf{a} \approx \mathbf{v}_b
+\textbf{a} \approx \mathbf{v}_a \text{ or } \textbf{a} \approx \mathbf{v}_b
 $$
 >
 >Since randomly sampled following $\lambda_i \sim \mathcal{N}(1, \beta)$,
@@ -109,11 +109,11 @@ $$
 >Over multiple resamplings of $\lambda_1, ..., \lambda_m$,
 >
 >$$
-\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
+\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 
 #### **1.4 Noisy Average with Multi-head Attention**
-Q. Let's now consider a simple version of multi-head attention that averages the attended features resulting from two different queries. Here, two queries are defined ($\mathbf{q}_1$ and $\mathbf{q}_2$) leading to two different attended features ($\mathbf{a}_1$ and $\mathbf{a}_2$). The output of this computation will be $\mathbf{a} = \frac{1}{2}(\mathbf{a}_1 + \mathbf{a}_2)$. Assume we have keys like those in Task 1.3, design queries $\mathbf{q}_1$ and $\mathbf{q}_2$ such that $\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
+Q. Let's now consider a simple version of multi-head attention that averages the attended features resulting from two different queries. Here, two queries are defined ($\mathbf{q}_1$ and $\mathbf{q}_2$) leading to two different attended features ($\textbf{a}_1$ and $\textbf{a}_2$). The output of this computation will be $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$. Assume we have keys like those in Task 1.3, design queries $\mathbf{q}_1$ and $\mathbf{q}_2$ such that $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
 
 >From the task 1.3, the expression $\mathbf{q}$ below,
 >
@@ -121,7 +121,7 @@ Q. Let's now consider a simple version of multi-head attention that averages the
 \mathbf{q}=c(\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b)
 $$
 >
->This expression for $\mathbf{q}$ yields $\mathbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. Utilizing the notion that each $\mathbf{\mu}_i$ can maintain its term, the following expressions for $\mathbf{q}_1$ and $\mathbf{q}_2$ can ensure $\mathbf{a} = \frac{1}{2}(\mathbf{a}_1 + \mathbf{a}_2)$.
+>This expression for $\mathbf{q}$ yields $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. Utilizing the notion that each $\mathbf{\mu}_i$ can maintain its term, the following expressions for $\mathbf{q}_1$ and $\mathbf{q}_2$ can ensure $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$.
 >
 >$$
 \mathbf{q}_1=c_1\lambda_a*\mathbf{\mu}_a
@@ -141,7 +141,7 @@ $$
 \mathbf{q}_2\mathbf{k}_b^T=c_2\lambda_b*\mathbf{\mu}_b\mathbf{k}_b^T =c_2\lambda_b^2*(\mathbf{\mu}_b\mathbf{\mu}_b^T)=c_2\lambda_b^2
 $$
 >
->From here, $\mathbf{a}_1$ and $\mathbf{a}_2$ can be expressed,
+>From here, $\textbf{a}_1$ and $\textbf{a}_2$ can be expressed,
 >
 >$$
 \alpha_i=\mbox{softmax}(\mathbf{q}_1\mathbf{k}_i^T)
@@ -164,15 +164,15 @@ $$
 $$
 >
 >$$
-\mathbf{a}_1 = \alpha_a \mathbf{v}_a = \mathbf{v}_a
+\textbf{a}_1 = \alpha_a \mathbf{v}_a = \mathbf{v}_a
 \hspace{40pt}
-\mathbf{a}_2 = \alpha_b \mathbf{v}_b = \mathbf{v}_b
+\textbf{a}_2 = \alpha_b \mathbf{v}_b = \mathbf{v}_b
 $$
 >
->The final output is the average of $\mathbf{a}_1$ and $\mathbf{a}_2$.
+>The final output is the average of $\textbf{a}_1$ and $\textbf{a}_2$.
 >
 >$$
-\mathbf{a} = \frac{1}{2}(\mathbf{a}_1 + \mathbf{a}_2)
+\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)
 $$
 
 ### 2. German-to-English Machine Translation
