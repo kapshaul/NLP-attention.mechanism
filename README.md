@@ -4,6 +4,8 @@
 
 The main objective of this project is to understand scaled dot-product attention and to implement a simple attention mechanism in a sequence-to-sequence model. The task involves translating sentences from German to English using the Multi30k dataset, which contains over 31,000 bitext sentences describing common visual scenes in both languages.
 
+---
+
 ### 1. Scaled Dot-Product Attention
 
 Starts from the definition of a single-query scaled dot-product attention mechanism. Given a query $\mathbf{q} \in \mathbb{R}^{1\times d}$, a set of candidates represented by keys $\mathbf{k}_1, ... , \mathbf{k}_m \in \mathbb{R}^{1\times d}$ and values $\mathbf{v}_1, ... , \mathbf{v}_m \in \mathbb{R}^{1\times d_v}$, we compute the scaled dot-product attention as:
@@ -18,12 +20,12 @@ $$
 
 where the $\alpha_i$ are referred to as attention values (or collectively as an attention distribution).
 
-#### **1.1 Copying**
+#### **1.1. Copying**
 Q. Describe what properties of the keys and queries would result in the output $\textbf{a}$ being equal to one of the input values $\mathbf{v}_j$. Specifically, what must be true about the query $\mathbf{q}$ and the keys $\mathbf{k}_1, ..., \mathbf{k}_m$ such that $\textbf{a} \approx \mathbf{v}_j$? (We assume all values are unique -- $\mathbf{v}_i \neq \mathbf{v}_j,~\forall ij$.)
 
 > In the case where $\textbf{a} \approx \mathbf{v}_j$, the similarity score for $\mathbf{q}\mathbf{k}_j^T$ is significantly higher than all others due to the softmax function producing outputs to have probability distribution. Therefore, given a query $\mathbf{q}$, $\mathbf{k}_j$ must be significantly higher than others to determine the similarity score.
 
-#### **1.2 Average of Two**
+#### **1.2. Average of Two**
 Q. Consider a set of key vectors $\mathbf{k}_1, ... , \mathbf{k}_m$ where all keys are orthogonal unit vectors -- that is to say $\mathbf{k}_i \mathbf{k}_j^T = 0, \forall ij$ and $\Vert\mathbf{k}_i\Vert=1,\forall i$. Let $\mathbf{v}_a, \mathbf{v}_b \in \{\mathbf{v}_1, ..., \mathbf{v}_m\}$ be two value vectors. Give an expression for a query vector $\mathbf{q}$ such that the output $\textbf{a}$ is approximately equal to the average of $\mathbf{v}_a$ and $\mathbf{v}_b$, that is to say $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. You can reference the key vectors corresponding to $\mathbf{v}_a$ and $\mathbf{v}_b$ as $\mathbf{k}_a$ and $\mathbf{k_b}$ respectively.
 
 >From $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.\
@@ -59,7 +61,7 @@ $$
 \textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 
-#### **1.3 Noisy Average**
+#### **1.3. Noisy Average**
 Q. Now consider a set of key vectors $\{\mathbf{k}_1, ... , \mathbf{k}_m\}$ where keys are randomly scaled such that $\mathbf{k}_i = \mathbf{\mu}_i*\lambda_i$ where $\lambda_i \sim \mathcal{N}(1, \beta)$ is a randomly sampled scalar multiplier. Assume the unscaled vectors $\mu_1, ..., \mu_m$ are orthogonal unit vectors. If you use the same strategy to construct the query $q$ as you did in Task 1.2, what would be the outcome here? Specifically, derive $\mathbf{q}\mathbf{k}_a^T$ and $\mathbf{q}\mathbf{k}_b^T$ in terms of $\mu$'s and $\lambda$'s. Qualitatively describe what how the output $a$ would vary over multiple resamplings of $\lambda_1, ..., \lambda_m$.
 
 >From the expression for $\mathbf{q}$ in Task 1.2,
@@ -112,7 +114,7 @@ $$
 \textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 
-#### **1.4 Noisy Average with Multi-head Attention**
+#### **1.4. Noisy Average with Multi-head Attention**
 Q. Let's now consider a simple version of multi-head attention that averages the attended features resulting from two different queries. Here, two queries are defined ($\mathbf{q}_1$ and $\mathbf{q}_2$) leading to two different attended features ($\textbf{a}_1$ and $\textbf{a}_2$). The output of this computation will be $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$. Assume we have keys like those in Task 1.3, design queries $\mathbf{q}_1$ and $\mathbf{q}_2$ such that $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
 
 >From the task 1.3, the expression $\mathbf{q}$ below,
@@ -177,4 +179,83 @@ $$
 
 ### 2. German-to-English Machine Translation
 
-### 3. BLEU Score Comparision
+Machine translation involves automatically converting text from one language to another using computational models. In the context of translating German to English, Scaled-Dot Product Attention is a core mechanism used in modern neural networks, particularly in models like the **Transformer**. This mechanism allows the model to focus on relevant parts of the input sentence when generating the output translation, enabling it to capture the nuances and structure of German and translate them effectively into English.
+
+By using Scaled-Dot Product Attention, the model effectively learns these common patterns and differences between German and English
+
+<br>
+
+#### **2.1. German-to-English Attention Pattern**
+
+<div align="center">
+    
+<img src="https://github.com/kapshaul/NLP-attention.mechanism/blob/master/examples/104_translation.png" width="300">
+<img src="https://github.com/kapshaul/NLP-attention.mechanism/blob/master/examples/114_translation.png" width="300">
+
+**Example 1** $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ **Example 2**
+
+<img src="https://github.com/kapshaul/NLP-attention.mechanism/blob/master/examples/281_translation.png" width="300">
+<img src="https://github.com/kapshaul/NLP-attention.mechanism/blob/master/examples/759_translation.png" width="300">
+
+**Example 3** $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ $\hspace{20pt}$ **Example 4**
+
+**Figure 1**: Attention diagram examples
+
+</div>
+
+- **SVO vs SOV**
+
+English typically follows an SVO (Subject-Verb-Object) structure, while German often employs an SOV (Subject-Object-Verb) structure in subordinate clauses. This difference leads to deviations from the diagonal in the verb area on attention maps, as illustrated in Examples 1 and 2. For instance, deviations can be seen in the phrases "are climbing" in Example 1 and "are anticipating" in Example 2.
+
+- **Preposition and Conjunction**
+
+Prepositions and their objects usually align closely, but their usage can differ in certain cases. For example, in Example 3, the English preposition "to" corresponds to the German preposition "zu," and the English conjunction "while" corresponds to the German conjunction "während." Both of these cases show deviations rather than diagonal alignment. In Example 4, the English preposition "in front of" corresponds to the German preposition "vor," which also shows significant deviation.
+
+
+#### **2.2. Scaled-Dot Product Attention Code**
+
+```python
+class SingleQueryScaledDotProductAttention(nn.Module):    
+    # kq_dim is the dimension of keys and queries. Linear layers should be used to project inputs to these dimensions.
+    def __init__(self, enc_hid_dim, dec_hid_dim, kq_dim=512):
+        super().__init__()
+        self.W_k = nn.Linear(enc_hid_dim * 2, kq_dim)
+        self.W_q = nn.Linear(dec_hid_dim, kq_dim)
+        self.kq_dim = kq_dim
+
+        
+    #hidden is h_t^{d} from Eq. (11) and has dim => [batch_size, dec_hid_dim]
+    #encoder_outputs is the word representations from Eq. (6) 
+    # and has dim => [src_len, batch_size, enc_hid_dim * 2]
+    def forward(self, hidden, encoder_outputs):
+        # Compute for q = W_q h_j^{e}
+        query = self.W_q(hidden).unsqueeze(1)
+        # Compute for k_t = W_k h_t^{d}
+        key = self.W_k(encoder_outputs)
+        # Compute for score = qk^T / sqrt(d)
+        score = torch.bmm(query, key.T(1, 2)).squeeze(1) / np.sqrt(self.kq_dim)
+        # Compute alpha = softmax(score)
+        alpha = F.softmax(score, dim=1)
+        # Compute a = sum(alpha_j v_j)
+        attended_val = torch.sum(encoder_outputs * alpha.unsqueeze(2), dim=1)
+        
+        assert attended_val.shape == (hidden.shape[0], encoder_outputs.shape[2])
+        assert alpha.shape == (hidden.shape[0], encoder_outputs.shape[0])
+        return attended_val, alpha
+```
+
+#### **2.3. BLEU Score Comparision**
+
+Models were trained and evaluated using the *Dummy baseline*, *MeanPool*, and *attention mechanisms*. For each method, three independent runs were conducted, and the mean and variance of the results were calculated to compare performance and consistency.
+
+<div align="center">
+  
+| Attn. | PPL Mean | PPL Var | BLEU Mean | BLEU Var |
+|:-----:|:--------:|:-------:|:---------:|:--------:|
+| None  |  18.107  |  0.057  |   16.3    |  0.118   |
+| Mean  |  15.809  |  0.028  |  18.599   |  0.277   |
+| SDP   |  10.447  |  0.049  |  34.64    |  0.793   |
+
+</div>
+
+The trends indicate that the attention mechanism (SDP), significantly improve the model's performance, as lower perplexity and higher BLEU scores. However, the increased variance in BLEU scores with SDP suggests that there might be some variability caused by random initialization.
