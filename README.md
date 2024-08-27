@@ -261,4 +261,4 @@ Models were trained and evaluated using the *Dummy baseline*, *MeanPool*, and *a
 
 </div>
 
-The trends indicate that the attention mechanism (SDP), significantly improve the model's performance, as lower perplexity and higher BLEU scores. However, the increased variance in BLEU scores with SDP suggests that there might be some variability caused by random initialization.
+The trends indicate that the scaled dot-product attention mechanism (SDP), significantly improve the model's performance, as lower perplexity and higher BLEU scores. However, the increased variance in BLEU scores with SDP suggests that there might be some variability caused by random initialization.
