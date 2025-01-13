@@ -30,7 +30,7 @@ Q. Consider a set of key vectors $\mathbf{k}_1, ... , \mathbf{k}_m$ where all ke
 
 >From $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.
 >
->By constructing the original linear equation of $\mathbf{q}$ and $\mathbf{k}$, we can ensure if this expression satisfy the condition.
+>By constructing $\mathbf{q}=\mathbf{k}_a + \mathbf{k}_b$, we can ensure if this expression satisfy the condition.
 >
 >$$
 \mathbf{q}\mathbf{k}_a^T=(\mathbf{k}_a\mathbf{k}_a^T + \mathbf{k}_b\mathbf{k}_a^T)=(1+0)=1
@@ -61,80 +61,82 @@ Q. Now consider a set of key vectors $\{\mathbf{k}_1, ... , \mathbf{k}_m\}$ wher
 >From the expression for $\mathbf{q}$ in Task 1.2,
 >
 >$$
-\mathbf{q}=c(\mathbf{k}_a + \mathbf{k}_b)
+\mathbf{q}=\mathbf{k}_a + \mathbf{k}_b
 $$
 >
 >By substituting $\mathbf{k}_i = \mathbf{\mu}_i*\lambda_i$,
 >
 >$$
-\mathbf{q}=c(\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b)
+\mathbf{q}=\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b
 $$
 >
 >The expression for $\mathbf{q}\mathbf{k}_a^T$ and $\mathbf{q}\mathbf{k}_b^T$,
 >
 >$$
-\mathbf{q}\mathbf{k}_a^T=c(\lambda_a^2*\mathbf{\mu}_a\mathbf{\mu}_a^T + \lambda_a\lambda_b*\mathbf{\mu}_b\mathbf{\mu}_a^T)=c\lambda_a^2
+\mathbf{q}\mathbf{k}_a^T=\lambda_a^2*\mathbf{\mu}_a\mathbf{\mu}_a^T + \lambda_a\lambda_b*\mathbf{\mu}_b\mathbf{\mu}_a^T)=\lambda_a^2
 $$
 >
 >$$
-\mathbf{q}\mathbf{k}_b^T=c(\lambda_a\lambda_b*\mathbf{\mu}_a\mathbf{\mu}_b^T + \lambda_b^2*\mathbf{\mu}_b\mathbf{\mu}_b^T)=c\lambda_b^2
+\mathbf{q}\mathbf{k}_b^T=(\lambda_a\lambda_b*\mathbf{\mu}_a\mathbf{\mu}_b^T + \lambda_b^2*\mathbf{\mu}_b\mathbf{\mu}_b^T)=\lambda_b^2
 $$
 >
->When $\lambda_a \approx \lambda_b$,
+>Now, we can consider 3 different cases,
+>
+>Case 1. $\lambda_a \approx \lambda_b$,
 >
 >$$
 \textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 >
->When $\lambda_a \gg \lambda_b$ or $\lambda_a \ll \lambda_b$,
+>Case 2. $\lambda_a \gg \lambda_b$,
 >
 >$$
-\textbf{a} \approx \mathbf{v}_a \text{ or } \textbf{a} \approx \mathbf{v}_b
+\textbf{a} \approx \mathbf{v}_a
+$$
+>
+>Case 3. $\lambda_a \ll \lambda_b$,
+>
+>$$
+\textbf{a} \approx \mathbf{v}_b
 $$
 >
 >Since randomly sampled following $\lambda_i \sim \mathcal{N}(1, \beta)$,
 >
 >$$
-\mathbb{E}[\mathbf{q}\mathbf{k}_a^T]=\mathbb{E}[c\lambda_a^2]=c
+\mathbb{E}[\mathbf{q}\mathbf{k}_a^T]=\mathbb{E}[\lambda_a^2]=1
 $$
 >
 >$$
-\mathbb{E}[\mathbf{q}\mathbf{k}_b^T]=\mathbb{E}[c\lambda_b^2]=c
+\mathbb{E}[\mathbf{q}\mathbf{k}_b^T]=\mathbb{E}[\lambda_b^2]=1
 $$
 >
 >Over multiple resamplings of $\lambda_1, ..., \lambda_m$,
 >
 >$$
-\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
+\mathbb{E}[\textbf{a}] = \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)
 $$
 
 #### **1.4. Noisy Average with Multi-head Attention**
 Q. Let's now consider a simple version of multi-head attention that averages the attended features resulting from two different queries. Here, two queries are defined ($\mathbf{q}_1$ and $\mathbf{q}_2$) leading to two different attended features ($\textbf{a}_1$ and $\textbf{a}_2$). The output of this computation will be $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$. Assume we have keys like those in Task 1.3, design queries $\mathbf{q}_1$ and $\mathbf{q}_2$ such that $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
 
->From the task 1.3, the expression $\mathbf{q}$ below,
+>A simple strategy is to design each query so that one head selects $q_1=\mathbf{v}_a$ exclusively and the other head selects $q_2=\mathbf{v}_b$ exclusively. Then, by averaging those two attended features,
 >
 >$$
-\mathbf{q}=c(\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b)
-$$
->
->This expression for $\mathbf{q}$ yields $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. Utilizing the notion that each $\mathbf{\mu}_i$ can maintain its term, the following expressions for $\mathbf{q}_1$ and $\mathbf{q}_2$ can ensure $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$.
->
->$$
-\mathbf{q}_1=c_1\lambda_a*\mathbf{\mu}_a
+\mathbf{q}_1=\lambda_a*\mathbf{\mu}_a
 $$
 >
 >$$
-\mathbf{q}_2=c_2\lambda_b*\mathbf{\mu}_b
+\mathbf{q}_2=\lambda_b*\mathbf{\mu}_b
 $$
 >
 >By constructing the linear equation of $\mathbf{q}$ and $\mathbf{k}$,
 >
 >$$
-\mathbf{q}_1\mathbf{k}_a^T=c_1\lambda_a*\mathbf{\mu}_a\mathbf{k}_a^T =c_1\lambda_a^2*(\mathbf{\mu}_a\mathbf{\mu}_a^T)=c_1\lambda_a^2
+\mathbf{q}_1\mathbf{k}_a^T=\lambda_a*\mathbf{\mu}_a\mathbf{k}_a^T =\lambda_a^2*(\mathbf{\mu}_a\mathbf{\mu}_a^T)=\lambda_a^2
 $$
 >
 >$$
-\mathbf{q}_2\mathbf{k}_b^T=c_2\lambda_b*\mathbf{\mu}_b\mathbf{k}_b^T =c_2\lambda_b^2*(\mathbf{\mu}_b\mathbf{\mu}_b^T)=c_2\lambda_b^2
+\mathbf{q}_2\mathbf{k}_b^T=\lambda_b*\mathbf{\mu}_b\mathbf{k}_b^T =\lambda_b^2*(\mathbf{\mu}_b\mathbf{\mu}_b^T)=\lambda_b^2
 $$
 >
 >From here, $\textbf{a}_1$ and $\textbf{a}_2$ can be expressed,
