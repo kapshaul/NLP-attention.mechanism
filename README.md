@@ -64,20 +64,20 @@ Q. Now consider a set of key vectors $\{\mathbf{k}_1, ... , \mathbf{k}_m\}$ wher
 \mathbf{q}=c(\mathbf{k}_a + \mathbf{k}_b)
 $$
 >
->By substituting $\mathbf{k}_i = \mathbf{\mu}_i\lambda_i$,
+>By substituting $\mathbf{k}_i = \mathbf{\mu}_i*\lambda_i$,
 >
 >$$
-\mathbf{q}=c(\mathbf{\mu}_a\lambda_a + \mathbf{\mu}_b\lambda_b)
+\mathbf{q}=c(\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b)
 $$
 >
 >The expression for $\mathbf{q}\mathbf{k}_a^T$ and $\mathbf{q}\mathbf{k}_b^T$,
 >
 >$$
-\mathbf{q}\mathbf{k}_a^T=c(\lambda_a^2\mathbf{\mu}_a\mathbf{\mu}_a^T + \lambda_a\lambda_b\mathbf{\mu}_b\mathbf{\mu}_a^T)=c\lambda_a^2
+\mathbf{q}\mathbf{k}_a^T=c(\lambda_a^2*\mathbf{\mu}_a\mathbf{\mu}_a^T + \lambda_a\lambda_b*\mathbf{\mu}_b\mathbf{\mu}_a^T)=c\lambda_a^2
 $$
 >
 >$$
-\mathbf{q}\mathbf{k}_b^T=c(\lambda_a\lambda_b\mathbf{\mu}_a\mathbf{\mu}_b^T + \lambda_b^2\mathbf{\mu}_b\mathbf{\mu}_b^T)=c\lambda_b^2
+\mathbf{q}\mathbf{k}_b^T=c(\lambda_a\lambda_b*\mathbf{\mu}_a\mathbf{\mu}_b^T + \lambda_b^2*\mathbf{\mu}_b\mathbf{\mu}_b^T)=c\lambda_b^2
 $$
 >
 >When $\lambda_a \approx \lambda_b$,
@@ -114,27 +114,27 @@ Q. Let's now consider a simple version of multi-head attention that averages the
 >From the task 1.3, the expression $\mathbf{q}$ below,
 >
 >$$
-\mathbf{q}=c(\mathbf{\mu}_a\lambda_a + \mathbf{\mu}_b\lambda_b)
+\mathbf{q}=c(\mathbf{\mu}_a*\lambda_a + \mathbf{\mu}_b*\lambda_b)
 $$
 >
 >This expression for $\mathbf{q}$ yields $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. Utilizing the notion that each $\mathbf{\mu}_i$ can maintain its term, the following expressions for $\mathbf{q}_1$ and $\mathbf{q}_2$ can ensure $\textbf{a} = \frac{1}{2}(\textbf{a}_1 + \textbf{a}_2)$.
 >
 >$$
-\mathbf{q}_1=c_1\lambda_a\mathbf{\mu}_a
+\mathbf{q}_1=c_1\lambda_a*\mathbf{\mu}_a
 $$
 >
 >$$
-\mathbf{q}_2=c_2\lambda_b\mathbf{\mu}_b
+\mathbf{q}_2=c_2\lambda_b*\mathbf{\mu}_b
 $$
 >
 >By constructing the linear equation of $\mathbf{q}$ and $\mathbf{k}$,
 >
 >$$
-\mathbf{q}_1\mathbf{k}_a^T=c_1\lambda_a\mathbf{\mu}_a\mathbf{k}_a^T =c_1\lambda_a^2(\mathbf{\mu}_a\mathbf{\mu}_a^T)=c_1\lambda_a^2
+\mathbf{q}_1\mathbf{k}_a^T=c_1\lambda_a*\mathbf{\mu}_a\mathbf{k}_a^T =c_1\lambda_a^2*(\mathbf{\mu}_a\mathbf{\mu}_a^T)=c_1\lambda_a^2
 $$
 >
 >$$
-\mathbf{q}_2\mathbf{k}_b^T=c_2\lambda_b\mathbf{\mu}_b\mathbf{k}_b^T =c_2\lambda_b^2(\mathbf{\mu}_b\mathbf{\mu}_b^T)=c_2\lambda_b^2
+\mathbf{q}_2\mathbf{k}_b^T=c_2\lambda_b*\mathbf{\mu}_b\mathbf{k}_b^T =c_2\lambda_b^2*(\mathbf{\mu}_b\mathbf{\mu}_b^T)=c_2\lambda_b^2
 $$
 >
 >From here, $\textbf{a}_1$ and $\textbf{a}_2$ can be expressed,
