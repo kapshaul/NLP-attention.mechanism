@@ -28,30 +28,24 @@ Q. Describe what properties of the keys and queries would result in the output $
 #### **1.2. Average of Two**
 Q. Consider a set of key vectors $\mathbf{k}_1, ... , \mathbf{k}_m$ where all keys are orthogonal unit vectors -- that is to say $\mathbf{k}_i \mathbf{k}_j^T = 0, \forall ij$ and $\Vert\mathbf{k}_i\Vert=1,\forall i$. Let $\mathbf{v}_a, \mathbf{v}_b \in \{\mathbf{v}_1, ..., \mathbf{v}_m\}$ be two value vectors. Give an expression for a query vector $\mathbf{q}$ such that the output $\textbf{a}$ is approximately equal to the average of $\mathbf{v}_a$ and $\mathbf{v}_b$, that is to say $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$. You can reference the key vectors corresponding to $\mathbf{v}_a$ and $\mathbf{v}_b$ as $\mathbf{k}_a$ and $\mathbf{k_b}$ respectively.
 
->From $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.\
-Considering $c$ as a large constant, the below expression for $\mathbf{q}$ can satisfy $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$.
->
->$$ \mathbf{q}=c(\mathbf{k}_a + \mathbf{k}_b) $$
+>From $\textbf{a} \approx \frac{1}{2}(\mathbf{v}_a + \mathbf{v}_b)$, we can consider the term $\frac{1}{2}$ is from $\alpha_i$. Meaning that $\alpha_a = \alpha_b$ and $\alpha_i = 0$ should be satisfied to meet the condition. Since $\alpha_i = \mbox{softmax}(\mathbf{q}\mathbf{k}_i^T)$, we only want to keep $\mathbf{k}_a$ and $\mathbf{k}_b$; otherwise, $\mathbf{k}_i=0$.
 >
 >By constructing the original linear equation of $\mathbf{q}$ and $\mathbf{k}$, we can ensure if this expression satisfy the condition.
 >
 >$$
-\mathbf{q}\mathbf{k}_a^T=c(\mathbf{k}_a\mathbf{k}_a^T + \mathbf{k}_b\mathbf{k}_a^T)=c(1+0)=c
+\mathbf{q}\mathbf{k}_a^T=(\mathbf{k}_a\mathbf{k}_a^T + \mathbf{k}_b\mathbf{k}_a^T)=(1+0)=1
 $$
 >
 >$$
-\mathbf{q}\mathbf{k}_b^T=c(\mathbf{k}_a\mathbf{k}_b^T + \mathbf{k}_b\mathbf{k}_b^T)=c(0+1)=c
+\mathbf{q}\mathbf{k}_b^T=(\mathbf{k}_a\mathbf{k}_b^T + \mathbf{k}_b\mathbf{k}_b^T)=(0+1)=1
 $$
 >
 >$$
-\mathbf{q}\mathbf{k}_i^T=c(\mathbf{k}_a\mathbf{k}_i^T + \mathbf{k}_b\mathbf{k}_i^T)=c(0+0)=0
+\mathbf{q}\mathbf{k}_i^T=(\mathbf{k}_a\mathbf{k}_i^T + \mathbf{k}_b\mathbf{k}_i^T)=(0+0)=0
 $$
 >
->Therefore, $\alpha_a = \alpha_b = c$ and $\alpha_i = 0$. $\textbf{a}$ can be written,
->
->$$
-\textbf{a} = \alpha_a \mathbf{v}_ a + \alpha_b \mathbf{v}_ b + \sum_{j=1, j\neq a, b}^m \alpha_j \mathbf{v}_j
-$$
+>After applying the softmax function, given that $\mathbf{q}\mathbf{k}_a^T = 1$, $\mathbf{q}\mathbf{k}_b^T = 1$, and $\mathbf{q}\mathbf{k}_i^T = 0$, the resulting attention weights are approximately $\alpha_a \approx \frac{1}{2}$ and $\alpha_b \approx \frac{1}{2}$.
+>Therefore $\textbf{a}$ can be written,
 >
 >$$
 \textbf{a} \approx \frac{1}{2}\mathbf{v}_a + \frac{1}{2}\mathbf{v}_b + 0
